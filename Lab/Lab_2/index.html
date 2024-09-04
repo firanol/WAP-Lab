@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workshop Registration</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Workshop Registration</h1>
+            <div class="dropdown">
+                <button class="dropbtn">More Actions ▾</button>
+                <div class="dropdown-content">
+                    <a href="#">Action 1</a>
+                    <a href="#">Action 2</a>
+                    <a href="#">Action 3</a>
+                </div>
+            </div>
+        </div>
+        <a href="#" class="registration-link">Register now while seats are available!</a>
+        <form action="#" method="post">
+            <div class="form-left">
+                <div class="form-group">
+                    <label for="first-name">First Name <span class="required">*</span></label>
+                    <input type="text" id="first-name" name="first-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="last-name">Last Name <span class="required">*</span></label>
+                    <input type="text" id="last-name" name="last-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="company">Company/Institution <span class="required">*</span></label>
+                    <input type="text" id="company" name="company">
+                </div>
+                <div class="form-group">
+                    <label for="address">Address <span class="required">*</span></label>
+                    <textarea id="address" name="address" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <input type="text" id="city" name="city">
+                </div>
+                <div class="form-group">
+                    <label for="state">State / Province / Region</label>
+                    <select id="state" name="state">
+                        <option value="" disabled selected>Select</option>
+                        <option value="state1">State 1</option>
+                        <option value="state2">State 2</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <select id="country" name="country">
+                        <option value="" disabled selected>Select</option>
+                        <option value="country1">Country 1</option>
+                        <option value="country2">Country 2</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number <span class="required">*</span></label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+            </div>
+            <div class="form-right">
+                <div class="form-group">
+                    <label>Lunch</label>
+                </div>
+                <div class="form-group">
+                    <label for="meal-preference">Meal Preference</label>
+                    <select id="meal-preference" name="meal-preference">
+                        <option value="vegetarian">Vegetarian</option>
+                        <option value="non-vegetarian">Non-Vegetarian</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Payment Details</label>
+                </div>
+                <fieldset class="form-group">
+                    <legend>Payment Mode</legend>
+                    <div>
+                        <input type="radio" id="cash" name="payment" value="cash">
+                        <label for="cash">Cash</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="cheque" name="payment" value="cheque">
+                        <label for="cheque">Cheque</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="dd" name="payment" value="dd">
+                        <label for="dd">Demand Draft</label>
+                    </div>
+                </fieldset>
+                <div class="form-group">
+                    <label for="dd-number">DD/Cheque No.</label>
+                    <input type="text" id="dd-number" name="dd-number">
+                </div>
+                <div class="form-group">
+                    <label for="bank-name">Drawn On (Bank Name)</label>
+                    <input type="text" id="bank-name" name="bank-name">
+                </div>
+                <div class="form-group">
+                    <label for="payable-at">Payable at</label>
+                    <input type="text" id="payable-at" name="payable-at">
+                </div>
+            </div>
+            <div class="form-buttons">
+                <button type="submit">Submit</button>
+                <button type="reset">Reset</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
