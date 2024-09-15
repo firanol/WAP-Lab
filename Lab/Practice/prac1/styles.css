@@ -1,0 +1,44 @@
+#main  div {
+
+    color: green;
+
+    background-color: blue;
+
+}
+
+
+.a  >  p {
+
+    color: cyan;
+
+    background-color: gray;
+
+}
+
+
+p   .b {
+
+    color: navy;
+
+    background-color: violet;
+
+}
+
+div,
+
+span {
+
+    color: red;
+
+    background-color: yellow;
+
+}
+
+
+p {
+
+    color: purple;
+
+    background-color: pink;
+
+}
