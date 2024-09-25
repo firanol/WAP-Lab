@@ -1,3 +1,4 @@
+// PostItem.tsx
 import {
     Card,
     CardActions,
@@ -8,6 +9,8 @@ import {
     IconButton,
     IconButtonProps,
     Typography,
+    TextField,
+    Button
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useContext, useState } from "react";
@@ -23,6 +26,12 @@ interface ExpandMoreProps extends IconButtonProps {
     expand: boolean;
 }
 
+interface PostItemProps {
+    post: Post;
+    updatePost: (id: string, updatedData: { title: string; body: string }) => void;
+    deletePost: (id: string) => void; // Make sure deletePost is added here
+}
+
 const ExpandMore = styled((props: ExpandMoreProps) => {
     const { expand, ...other } = props;
     return <IconButton {...other} />;
@@ -31,12 +40,39 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
     marginLeft: "auto",
 }));
 
-export default function PostItem({ post }: { post: Post }) {
+export default function PostItem({ post, updatePost, deletePost }: PostItemProps) {
     const { searchDate } = useContext(GlobalContext);
     const [expanded, setExpanded] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editedTitle, setEditedTitle] = useState(post.title);
+    const [editedBody, setEditedBody] = useState(post.body);
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
+    };
+
+    const handleEditClick = () => {
+        setIsEditing(true);
+    };
+
+    const handleCancelClick = () => {
+        setIsEditing(false);
+        setEditedTitle(post.title);
+        setEditedBody(post.body);
+    };
+
+    const handleSaveClick = () => {
+        updatePost(post.id, {
+            title: editedTitle,
+            body: editedBody
+        });
+        setIsEditing(false);
+    };
+
+    const handleDeleteClick = () => {
+        if (window.confirm("Are you sure you want to delete this post?")) {
+            deletePost(post.id);
+        }
     };
 
     return (
@@ -45,7 +81,7 @@ export default function PostItem({ post }: { post: Post }) {
                 subheader={
                     isToday(searchDate)
                         ? "Today"
-                        : convertDateToFormat(searchDate, "MMMM dd, yyyy")
+                        : convertDateToFormat(new Date(searchDate), "MMMM dd, yyyy")
                 }
             ></CardHeader>
             <CardMedia
@@ -55,7 +91,38 @@ export default function PostItem({ post }: { post: Post }) {
                 alt="Daily diary"
             ></CardMedia>
             <CardContent>
-                <Typography color="text.primary">{post.title}</Typography>
+                {isEditing ? (
+                    <>
+                        <TextField
+                            fullWidth
+                            label="Title"
+                            value={editedTitle}
+                            onChange={(e) => setEditedTitle(e.target.value)}
+                            sx={{ mb: 2 }}
+                        />
+                        <TextField
+                            fullWidth
+                            label="Body"
+                            value={editedBody}
+                            onChange={(e) => setEditedBody(e.target.value)}
+                            multiline
+                            rows={4}
+                        />
+                        <Button onClick={handleSaveClick} variant="contained" sx={{ mt: 2, mr: 1 }}>
+                            Save
+                        </Button>
+                        <Button onClick={handleCancelClick} variant="outlined" sx={{ mt: 2 }}>
+                            Cancel
+                        </Button>
+                    </>
+                ) : (
+                    <>
+                        <Typography color="text.primary">{post.title}</Typography>
+                        <Typography color="text.secondary" paragraph sx={{ whiteSpace: "pre-wrap" }}>
+                            {post.body}
+                        </Typography>
+                    </>
+                )}
                 <CardActions disableSpacing>
                     <Votes post={post}></Votes>
                     <ExpandMore
@@ -66,6 +133,16 @@ export default function PostItem({ post }: { post: Post }) {
                     >
                         <ExpandMoreIcon />
                     </ExpandMore>
+                    {!isEditing && (
+                        <>
+                            <Button onClick={handleEditClick} variant="outlined" sx={{ ml: 2 }}>
+                                Edit
+                            </Button>
+                            <Button onClick={handleDeleteClick} variant="contained" color="error" sx={{ ml: 2 }}>
+                                Delete
+                            </Button>
+                        </>
+                    )}
                 </CardActions>
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <CardContent>

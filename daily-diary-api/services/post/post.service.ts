@@ -4,6 +4,7 @@ import { CustomError } from "../../utils/custom-error";
 import { Post } from "../../models/post/post.model";
 import { StatusCodes } from "../../models/enums/status.enum";
 import { errorLogStream } from "../../middlewares/middleware";
+import { generateDataFilenameByDate } from "../../utils/utils";
 
 export class PostService {
     private posts: Post[] = [];
@@ -16,11 +17,11 @@ export class PostService {
                 this.fullFilePath,
                 "utf-8"
             );
-            this.posts = JSON.parse(fileContent);
+            this.posts = [...JSON.parse(fileContent)];
         } catch (error) {
-            errorLogStream.write(`${error.message}\n`);
+            errorLogStream.write(`File Read Error ${error.message}\n`);
             this.posts = [];
-        }
+        }        
     }
 
     persist = (): void => {
@@ -54,8 +55,22 @@ export class PostService {
 
     addPost = (post: Post): Post => {
         this.posts = [...this.posts, post];
+        console.log(this.posts)
         this.persist();
         return post;
+    };
+
+    deletePostById = (id: string,date :string): void => {  
+        const initialLength = this.posts.length;
+        this.posts = this.posts.filter(p=> p.id !== id)               
+        if(this.posts.length === initialLength){
+            errorLogStream.write(`Not able to delete the post with id: ${id}\n`);
+            throw new CustomError(
+                StatusCodes.NOT_FOUND,
+                `Not able to delete the post with id: ${id}`
+            );
+        }          
+        this.persist();     
     };
 
     votedPostById = (id: string, votes: number): Post | null => {
@@ -67,7 +82,7 @@ export class PostService {
             }
             return e;
         });
-
+        console.log(this.posts)
         if (!post) {
             errorLogStream.write(`Not found post with id: ${id}\n`);
             throw new CustomError(
@@ -78,5 +93,20 @@ export class PostService {
 
         this.persist();
         return post;
+    };
+
+    updatePostById = (id: string, updatedPost: Partial<Post>): Post => {
+        console.log(this.posts)
+
+        const index = this.posts.findIndex((post) => post.id === id);
+        console.log(index)
+        console.log(id)
+        if (index === -1) {
+            throw new CustomError(StatusCodes.NOT_FOUND, `Not found post with id: ${id}`);
+        }
+
+        this.posts[index] = { ...this.posts[index], ...updatedPost };
+        this.persist();
+        return this.posts[index];
     };
 }
